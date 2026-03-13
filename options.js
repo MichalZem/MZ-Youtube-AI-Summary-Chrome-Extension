@@ -17,7 +17,6 @@ function localizePage() {
     const key = el.getAttribute("data-i18n-html");
     const text = msg(key);
     if (text) {
-      // Wrap code-like content (square brackets) in <code> tags
       el.innerHTML = text.replace(
         /(\{[^}]+\}|\[\d{2}:\d{2}\])/g,
         "<code>$1</code>"
@@ -30,13 +29,33 @@ function localizePage() {
 const statusEl = document.getElementById("status");
 const promptEl = document.getElementById("prompt-template");
 const timestampsEl = document.getElementById("timestamps");
-const saveBtn = document.getElementById("btn-save");
 const resetBtn = document.getElementById("btn-reset");
+
+let saveTimeout = null;
+
+function saveAll() {
+  const ai =
+    document.querySelector('input[name="ai"]:checked')?.value || "chatgpt";
+  chrome.storage.local.set(
+    {
+      ytAiService: ai,
+      ytPromptTemplate: promptEl.value,
+      ytTimestamps: timestampsEl.checked,
+    },
+    () => showStatus(msg("settingsSaved"))
+  );
+}
+
+// Debounced save for text input (waits 500ms after last keystroke)
+function saveDebounced() {
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(saveAll, 500);
+}
 
 function showStatus(msgText, ok = true) {
   statusEl.textContent = msgText;
   statusEl.className = ok ? "status-ok" : "status-err";
-  setTimeout(() => (statusEl.textContent = ""), 2500);
+  setTimeout(() => (statusEl.textContent = ""), 1500);
 }
 
 // Init
@@ -55,22 +74,16 @@ chrome.storage.local.get(
   }
 );
 
-// Save
-saveBtn.addEventListener("click", () => {
-  const ai =
-    document.querySelector('input[name="ai"]:checked')?.value || "chatgpt";
-  chrome.storage.local.set(
-    {
-      ytAiService: ai,
-      ytPromptTemplate: promptEl.value,
-      ytTimestamps: timestampsEl.checked,
-    },
-    () => showStatus(msg("settingsSaved"))
-  );
+// Auto-save on any change
+document.querySelectorAll('input[name="ai"]').forEach((radio) => {
+  radio.addEventListener("change", saveAll);
 });
+timestampsEl.addEventListener("change", saveAll);
+promptEl.addEventListener("input", saveDebounced);
 
 // Reset prompt
 resetBtn.addEventListener("click", () => {
   promptEl.value = getDefaultPrompt();
+  saveAll();
   showStatus(msg("settingsResetDone"));
 });
