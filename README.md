@@ -4,6 +4,10 @@
 
 Extrahuje titulky z YouTube videa a odešle je do vybrané AI služby k vytvoření shrnutí.
 
+### 🌐 Language / Jazyk
+
+> **[🇨🇿 Česky](#-česky)** · **[🇬🇧 English](#-english)**
+
 ---
 
 ## 🇨🇿 Česky
