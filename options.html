@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>YouTube Summary — Settings</title>
+<title data-i18n="settingsTitle">YouTube AI Summary — Settings</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -35,7 +35,6 @@ h1 span { font-size: 26px; }
   margin-bottom: 16px;
 }
 .card h3 {
-  font-size: 14px;
   font-weight: 600;
   color: #b0b0c0;
   margin-bottom: 12px;
@@ -180,10 +179,10 @@ button {
 </head>
 <body>
   <div class="container">
-    <h1><span>▶</span> YouTube Summary — Settings</h1>
+    <h1><span>▶</span> <span data-i18n="settingsTitle"></span></h1>
 
     <div class="card">
-      <h3>AI Service</h3>
+      <h3 data-i18n="settingsAiService"></h3>
       <div class="ai-options">
         <input type="radio" name="ai" id="ai-chatgpt" value="chatgpt">
         <label for="ai-chatgpt"><span class="ai-dot" style="background:#10a37f"></span>ChatGPT</label>
@@ -200,25 +199,23 @@ button {
     </div>
 
     <div class="card">
-      <h3>Options</h3>
+      <h3 data-i18n="settingsOptions"></h3>
       <label class="toggle-label">
         <input type="checkbox" id="timestamps">
         <span class="toggle-switch"></span>
-        Include timestamps — e.g. <code>[01:30]</code> before each subtitle line
+        <span data-i18n-html="settingsTimestamps"></span>
       </label>
     </div>
 
     <div class="card">
-      <h3>Prompt Template</h3>
+      <h3 data-i18n="settingsPromptTemplate"></h3>
       <textarea id="prompt-template"></textarea>
-      <div class="hint">
-        Placeholders: <code>{title}</code> <code>{url}</code> <code>{lang}</code> <code>{subtitles}</code>
-      </div>
+      <div class="hint" data-i18n-html="settingsPlaceholders"></div>
     </div>
 
     <div class="actions">
-      <button id="btn-save">Save Settings</button>
-      <button id="btn-reset">Reset Prompt</button>
+      <button id="btn-save" data-i18n="settingsSave"></button>
+      <button id="btn-reset" data-i18n="settingsReset"></button>
     </div>
     <div id="status"></div>
   </div>

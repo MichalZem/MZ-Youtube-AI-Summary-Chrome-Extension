@@ -1,14 +1,7 @@
-const DEFAULT_PROMPT = `Please provide a comprehensive summary of the following YouTube video.
-
-Video title: {title}
-Video URL: {url}
-Subtitle language: {lang}
-
-Subtitles:
-{subtitles}
-
----
-Please summarize the key points of this video in a clear and structured way.`;
+function getDefaultPrompt() {
+  return chrome.i18n.getMessage("defaultPrompt") ||
+    "Please provide a comprehensive summary of the following YouTube video.\n\nVideo title: {title}\nVideo URL: {url}\nSubtitle language: {lang}\n\nSubtitles:\n{subtitles}\n\n---\nPlease summarize the key points of this video in a clear and structured way.";
+}
 
 function formatTime(totalSeconds) {
   const h = Math.floor(totalSeconds / 3600);
@@ -69,7 +62,7 @@ const AI_URLS = {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "yt-summary-settings",
-    title: "Settings",
+    title: chrome.i18n.getMessage("contextMenuSettings") || "Settings",
     contexts: ["action"],
   });
 });
@@ -101,7 +94,7 @@ async function summarizeVideo(tabId, videoId, tabTitle) {
     "ytTimestamps",
   ]);
   const ai = settings.ytAiService || "chatgpt";
-  const template = settings.ytPromptTemplate || DEFAULT_PROMPT;
+  const template = settings.ytPromptTemplate || getDefaultPrompt();
   const timestamps = settings.ytTimestamps || false;
 
   const subtitlesText = timestamps

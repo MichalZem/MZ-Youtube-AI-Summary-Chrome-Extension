@@ -11,8 +11,9 @@
 
     const btn = document.createElement("button");
     btn.id = BUTTON_ID;
-    btn.title = "Summarize video with AI";
-    btn.textContent = "✨ AI Summary";
+    const label = chrome.i18n.getMessage("buttonLabel") || "AI Summary";
+    btn.title = label;
+    btn.textContent = "✨ " + label;
 
     const style = document.createElement("style");
     style.textContent = `
@@ -59,7 +60,7 @@
 
     const originalText = btn.textContent;
     btn.classList.add("loading");
-    btn.textContent = "⏳ Loading...";
+    btn.textContent = "⏳ " + (chrome.i18n.getMessage("buttonLoading") || "Loading...");
 
     try {
       const response = await chrome.runtime.sendMessage({
@@ -71,7 +72,7 @@
       }
     } catch (err) {
       console.error("YT Summary:", err);
-      btn.textContent = "❌ Error";
+      btn.textContent = "❌ " + (chrome.i18n.getMessage("buttonError") || "Error");
       setTimeout(() => (btn.textContent = originalText), 2000);
     } finally {
       btn.classList.remove("loading");

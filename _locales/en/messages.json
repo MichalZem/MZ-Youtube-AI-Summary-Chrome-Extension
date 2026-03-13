@@ -1,0 +1,65 @@
+{
+  "extName": {
+    "message": "YouTube AI Summary"
+  },
+  "extDescription": {
+    "message": "Summarize YouTube videos using ChatGPT, Claude, Gemini, or Grok."
+  },
+  "actionTitle": {
+    "message": "Summarize this YouTube video"
+  },
+  "contextMenuSettings": {
+    "message": "Settings"
+  },
+  "buttonLabel": {
+    "message": "AI Summary"
+  },
+  "buttonLoading": {
+    "message": "Loading..."
+  },
+  "buttonError": {
+    "message": "Error"
+  },
+  "settingsTitle": {
+    "message": "YouTube AI Summary — Settings"
+  },
+  "settingsAiService": {
+    "message": "AI Service"
+  },
+  "settingsOptions": {
+    "message": "Options"
+  },
+  "settingsTimestamps": {
+    "message": "Include timestamps — e.g. $EXAMPLE$ before each subtitle line",
+    "placeholders": {
+      "example": { "content": "[01:30]" }
+    }
+  },
+  "settingsPromptTemplate": {
+    "message": "Prompt Template"
+  },
+  "settingsPlaceholders": {
+    "message": "Placeholders: $P1$ $P2$ $P3$ $P4$",
+    "placeholders": {
+      "p1": { "content": "{title}" },
+      "p2": { "content": "{url}" },
+      "p3": { "content": "{lang}" },
+      "p4": { "content": "{subtitles}" }
+    }
+  },
+  "settingsSave": {
+    "message": "Save Settings"
+  },
+  "settingsReset": {
+    "message": "Reset Prompt"
+  },
+  "settingsSaved": {
+    "message": "Settings saved!"
+  },
+  "settingsResetDone": {
+    "message": "Prompt reset to default"
+  },
+  "defaultPrompt": {
+    "message": "Please provide a comprehensive summary of the following YouTube video.\n\nVideo title: {title}\nVideo URL: {url}\nSubtitle language: {lang}\n\nSubtitles:\n{subtitles}\n\n---\nPlease summarize the key points of this video in a clear and structured way."
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "extName": {
+    "message": "YouTube AI Shrnutí"
+  },
+  "extDescription": {
+    "message": "Shrnutí YouTube videí pomocí ChatGPT, Claude, Gemini nebo Grok."
+  },
+  "actionTitle": {
+    "message": "Shrnout toto YouTube video"
+  },
+  "contextMenuSettings": {
+    "message": "Nastavení"
+  },
+  "buttonLabel": {
+    "message": "AI Shrnutí"
+  },
+  "buttonLoading": {
+    "message": "Načítání..."
+  },
+  "buttonError": {
+    "message": "Chyba"
+  },
+  "settingsTitle": {
+    "message": "YouTube AI Shrnutí — Nastavení"
+  },
+  "settingsAiService": {
+    "message": "AI služba"
+  },
+  "settingsOptions": {
+    "message": "Možnosti"
+  },
+  "settingsTimestamps": {
+    "message": "Zahrnout časové značky — např. $EXAMPLE$ před každým řádkem titulků",
+    "placeholders": {
+      "example": { "content": "[01:30]" }
+    }
+  },
+  "settingsPromptTemplate": {
+    "message": "Šablona promptu"
+  },
+  "settingsPlaceholders": {
+    "message": "Zástupné znaky: $P1$ $P2$ $P3$ $P4$",
+    "placeholders": {
+      "p1": { "content": "{title}" },
+      "p2": { "content": "{url}" },
+      "p3": { "content": "{lang}" },
+      "p4": { "content": "{subtitles}" }
+    }
+  },
+  "settingsSave": {
+    "message": "Uložit nastavení"
+  },
+  "settingsReset": {
+    "message": "Obnovit prompt"
+  },
+  "settingsSaved": {
+    "message": "Nastavení uloženo!"
+  },
+  "settingsResetDone": {
+    "message": "Prompt obnoven na výchozí"
+  },
+  "defaultPrompt": {
+    "message": "Prosím, vytvoř podrobné shrnutí následujícího YouTube videa.\n\nNázev videa: {title}\nURL videa: {url}\nJazyk titulků: {lang}\n\nTitulky:\n{subtitles}\n\n---\nShrň klíčové body tohoto videa přehledně a strukturovaně."
+  }
+}

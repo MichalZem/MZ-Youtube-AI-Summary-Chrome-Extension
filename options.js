@@ -1,14 +1,31 @@
-const DEFAULT_PROMPT = `Please provide a comprehensive summary of the following YouTube video.
+function msg(key) {
+  return chrome.i18n.getMessage(key) || key;
+}
 
-Video title: {title}
-Video URL: {url}
-Subtitle language: {lang}
+function getDefaultPrompt() {
+  return msg("defaultPrompt");
+}
 
-Subtitles:
-{subtitles}
-
----
-Please summarize the key points of this video in a clear and structured way.`;
+// Localize all elements with data-i18n and data-i18n-html attributes
+function localizePage() {
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.getAttribute("data-i18n");
+    const text = msg(key);
+    if (text) el.textContent = text;
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-html");
+    const text = msg(key);
+    if (text) {
+      // Wrap code-like content (square brackets) in <code> tags
+      el.innerHTML = text.replace(
+        /(\{[^}]+\}|\[\d{2}:\d{2}\])/g,
+        "<code>$1</code>"
+      );
+    }
+  });
+  document.title = msg("settingsTitle");
+}
 
 const statusEl = document.getElementById("status");
 const promptEl = document.getElementById("prompt-template");
@@ -16,11 +33,14 @@ const timestampsEl = document.getElementById("timestamps");
 const saveBtn = document.getElementById("btn-save");
 const resetBtn = document.getElementById("btn-reset");
 
-function showStatus(msg, ok = true) {
-  statusEl.textContent = msg;
+function showStatus(msgText, ok = true) {
+  statusEl.textContent = msgText;
   statusEl.className = ok ? "status-ok" : "status-err";
   setTimeout(() => (statusEl.textContent = ""), 2500);
 }
+
+// Init
+localizePage();
 
 // Load saved settings
 chrome.storage.local.get(
@@ -30,7 +50,7 @@ chrome.storage.local.get(
     const radio = document.getElementById("ai-" + ai);
     if (radio) radio.checked = true;
 
-    promptEl.value = data.ytPromptTemplate || DEFAULT_PROMPT;
+    promptEl.value = data.ytPromptTemplate || getDefaultPrompt();
     timestampsEl.checked = data.ytTimestamps || false;
   }
 );
@@ -45,12 +65,12 @@ saveBtn.addEventListener("click", () => {
       ytPromptTemplate: promptEl.value,
       ytTimestamps: timestampsEl.checked,
     },
-    () => showStatus("Settings saved!")
+    () => showStatus(msg("settingsSaved"))
   );
 });
 
 // Reset prompt
 resetBtn.addEventListener("click", () => {
-  promptEl.value = DEFAULT_PROMPT;
-  showStatus("Prompt reset to default");
+  promptEl.value = getDefaultPrompt();
+  showStatus(msg("settingsResetDone"));
 });
