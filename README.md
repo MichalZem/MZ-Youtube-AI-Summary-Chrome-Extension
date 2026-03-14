@@ -141,14 +141,17 @@ Since 2025, YouTube requires a **PO Token** (Proof of Origin) to access subtitle
 ## 📁 Project structure
 
 ```
-├── manifest.json        — Extension configuration (Manifest V3)
-├── background.js        — Service worker: subtitle extraction, PO token, prompt building
-├── youtube-button.js    — Content script: "AI Summary" button on YouTube pages
-├── inject.js            — Content script: prompt injection on AI service pages
-├── options.html         — Settings page UI
-├── options.js           — Settings page logic
-├── icon48.png           — Extension icon 48x48
-└── icon128.png          — Extension icon 128x128
+├── manifest.json            — Extension configuration (Manifest V3)
+├── background.js            — Service worker: subtitle extraction, PO token, prompt building
+├── youtube-button.js        — Content script: "AI Summary" button on YouTube pages
+├── inject.js                — Content script: prompt injection on AI service pages
+├── options.html             — Settings page UI
+├── options.js               — Settings page logic (auto-save)
+├── icon48.png               — Extension icon 48x48
+├── icon128.png              — Extension icon 128x128
+└── _locales/
+    ├── en/messages.json     — English localization
+    └── cs/messages.json     — Czech localization
 ```
 
 ## 📄 License
