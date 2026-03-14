@@ -1,0 +1,49 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get version from manifest
+        id: version
+        run: |
+          VERSION=$(jq -r '.version' manifest.json)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check if release already exists
+        id: check
+        run: |
+          if gh release view "v${{ steps.version.outputs.version }}" &>/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build ZIP
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          zip -r "MZ-Youtube-AI-Summary-v${{ steps.version.outputs.version }}.zip" \
+            manifest.json background.js inject.js youtube-button.js \
+            options.html options.js icon48.png icon128.png \
+            _locales README.md
+
+      - name: Create release
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          gh release create "v${{ steps.version.outputs.version }}" \
+            "MZ-Youtube-AI-Summary-v${{ steps.version.outputs.version }}.zip" \
+            --title "v${{ steps.version.outputs.version }} — YouTube AI Summary" \
+            --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
