@@ -70,13 +70,13 @@
       if (response?.error) {
         throw new Error(response.error);
       }
+      btn.textContent = originalText;
     } catch (err) {
       console.error("YT Summary:", err);
       btn.textContent = "❌ " + (chrome.i18n.getMessage("buttonError") || "Error");
       setTimeout(() => (btn.textContent = originalText), 2000);
     } finally {
       btn.classList.remove("loading");
-      btn.textContent = originalText;
     }
   }
 
