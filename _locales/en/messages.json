@@ -59,6 +59,30 @@
   "settingsResetDone": {
     "message": "Prompt reset to default"
   },
+  "templateDefaultName": {
+    "message": "Default Summary"
+  },
+  "templateMigratedName": {
+    "message": "My Prompt"
+  },
+  "templateNewName": {
+    "message": "New Template"
+  },
+  "templateAdd": {
+    "message": "Add Template"
+  },
+  "templateDeleteConfirm": {
+    "message": "Delete template?"
+  },
+  "templateCannotDeleteLast": {
+    "message": "Cannot delete the only template"
+  },
+  "settingsPromptTemplates": {
+    "message": "Prompt Templates"
+  },
+  "templateNamePlaceholder": {
+    "message": "Template name"
+  },
   "defaultPrompt": {
     "message": "Please provide a comprehensive summary of the following YouTube video.\n\nVideo title: {title}\nVideo URL: {url}\nSubtitle language: {lang}\n\nSubtitles:\n{subtitles}\n\n---\nPlease summarize the key points of this video in a clear and structured way."
   }

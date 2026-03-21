@@ -87,6 +87,67 @@ textarea {
   line-height: 1.6;
 }
 textarea:focus { outline: none; border-color: #10a37f; }
+.template-list {
+  list-style: none;
+  margin-bottom: 12px;
+}
+.template-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid #2a2a4a;
+  background: #16213e;
+  transition: all 0.15s;
+  font-weight: 500;
+  color: #c0c0d0;
+  margin-bottom: 6px;
+}
+.template-item:hover { background: #1a2744; border-color: #3a3a5a; }
+.template-item.active {
+  border-color: #10a37f;
+  background: #0f3d30;
+  color: #fff;
+}
+.template-item .template-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.template-item .template-delete {
+  background: none;
+  border: none;
+  color: #606080;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+.template-item .template-delete:hover { color: #e05050; }
+#btn-add-template {
+  background: #2a2a4a;
+  color: #b0b0c0;
+  border: 1px dashed #3a3a5a;
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  width: 100%;
+  transition: all 0.15s;
+  margin-bottom: 14px;
+}
+#btn-add-template:hover { background: #3a3a5a; color: #fff; }
+#template-name-input {
+  width: 100%;
+  background: #16213e;
+  color: #e0e0e0;
+  border: 1px solid #2a2a4a;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+#template-name-input:focus { outline: none; border-color: #10a37f; }
 .hint {
   font-size: 12px;
   color: #606080;
@@ -208,7 +269,10 @@ button {
     </div>
 
     <div class="card">
-      <h3 data-i18n="settingsPromptTemplate"></h3>
+      <h3 data-i18n="settingsPromptTemplates"></h3>
+      <ul id="template-list" class="template-list"></ul>
+      <button id="btn-add-template" data-i18n="templateAdd"></button>
+      <input type="text" id="template-name-input" data-i18n-placeholder="templateNamePlaceholder">
       <textarea id="prompt-template"></textarea>
       <div class="hint" data-i18n-html="settingsPlaceholders"></div>
     </div>

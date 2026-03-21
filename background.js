@@ -58,6 +58,24 @@ const AI_URLS = {
   grok: "https://grok.com/",
 };
 
+// Migrate old single-template format to new multi-template format
+async function migrateTemplates() {
+  const data = await chrome.storage.local.get(["ytPromptTemplates", "ytPromptTemplate"]);
+  if (data.ytPromptTemplates) return; // already migrated
+
+  const defaultPrompt = getDefaultPrompt();
+  const defaultName = chrome.i18n.getMessage("templateDefaultName") || "Default Summary";
+  const templates = [{ id: "default", name: defaultName, prompt: defaultPrompt }];
+
+  const oldPrompt = data.ytPromptTemplate;
+  if (oldPrompt && oldPrompt !== defaultPrompt) {
+    const migratedName = chrome.i18n.getMessage("templateMigratedName") || "My Prompt";
+    templates.push({ id: "t_" + Date.now(), name: migratedName, prompt: oldPrompt });
+  }
+
+  await chrome.storage.local.set({ ytPromptTemplates: templates });
+}
+
 // Create context menu on install
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
@@ -65,6 +83,7 @@ chrome.runtime.onInstalled.addListener(() => {
     title: chrome.i18n.getMessage("contextMenuSettings") || "Settings",
     contexts: ["action"],
   });
+  migrateTemplates();
 });
 
 // Right-click context menu → open settings
@@ -75,7 +94,7 @@ chrome.contextMenus.onClicked.addListener((info) => {
 });
 
 // Core: extract subtitles, build prompt, open AI
-async function summarizeVideo(tabId, videoId, tabTitle) {
+async function summarizeVideo(tabId, videoId, tabTitle, templateId) {
   const results = await chrome.scripting.executeScript({
     target: { tabId },
     world: "MAIN",
@@ -90,12 +109,20 @@ async function summarizeVideo(tabId, videoId, tabTitle) {
 
   const settings = await chrome.storage.local.get([
     "ytAiService",
-    "ytPromptTemplate",
+    "ytPromptTemplates",
     "ytTimestamps",
   ]);
   const ai = settings.ytAiService || "chatgpt";
-  const template = settings.ytPromptTemplate || getDefaultPrompt();
   const timestamps = settings.ytTimestamps || false;
+
+  let template = getDefaultPrompt();
+  const templates = settings.ytPromptTemplates;
+  if (templates && templates.length > 0) {
+    const found = templateId
+      ? templates.find((t) => t.id === templateId)
+      : templates[0];
+    if (found) template = found.prompt;
+  }
 
   const subtitlesText = timestamps
     ? formatWithTimestamps(data.segments, 20)
@@ -161,7 +188,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   const tabId = sender.tab.id;
   const tabTitle = sender.tab.title;
 
-  summarizeVideo(tabId, msg.videoId, tabTitle)
+  summarizeVideo(tabId, msg.videoId, tabTitle, msg.templateId)
     .then(() => sendResponse({ ok: true }))
     .catch((err) => sendResponse({ error: err.message }));
 

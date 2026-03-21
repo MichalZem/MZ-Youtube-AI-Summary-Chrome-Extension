@@ -59,6 +59,30 @@
   "settingsResetDone": {
     "message": "Prompt obnoven na výchozí"
   },
+  "templateDefaultName": {
+    "message": "Výchozí shrnutí"
+  },
+  "templateMigratedName": {
+    "message": "Můj prompt"
+  },
+  "templateNewName": {
+    "message": "Nová šablona"
+  },
+  "templateAdd": {
+    "message": "Přidat šablonu"
+  },
+  "templateDeleteConfirm": {
+    "message": "Smazat šablonu?"
+  },
+  "templateCannotDeleteLast": {
+    "message": "Nelze smazat jedinou šablonu"
+  },
+  "settingsPromptTemplates": {
+    "message": "Šablony promptů"
+  },
+  "templateNamePlaceholder": {
+    "message": "Název šablony"
+  },
   "defaultPrompt": {
     "message": "Prosím, vytvoř podrobné shrnutí následujícího YouTube videa.\n\nNázev videa: {title}\nURL videa: {url}\nJazyk titulků: {lang}\n\nTitulky:\n{subtitles}\n\n---\nShrň klíčové body tohoto videa přehledně a strukturovaně."
   }
