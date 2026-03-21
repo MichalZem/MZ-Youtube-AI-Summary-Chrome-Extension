@@ -53,6 +53,7 @@ YouTube requires a Proof of Origin token for timedtext API since 2025. The extra
 - **Content scripts** (`youtube-button.js`, `inject.js`) run in isolated world by default. They can use `chrome.runtime.sendMessage` and `chrome.storage` but not page JS variables.
 - Settings auto-save immediately on change. Prompt textarea uses 500ms debounce.
 - When bumping version in `manifest.json`, GitHub Actions automatically creates a release with ZIP.
+- **Always update this CLAUDE.md** after adding significant new functionality — document new entry points, storage keys, UI flows, and update the testing checklist.
 
 ## AI service injection (inject.js)
 
