@@ -21,11 +21,13 @@ Rozšíření přidá na YouTube stránku zelené tlačítko **"✨ AI Summary"*
 3. Otevře novou záložku s vybranou AI službou (ChatGPT, Claude, Gemini nebo Grok)
 4. Vloží prompt do textového pole a automaticky odešle
 
-Alternativně lze použít **ikonu rozšíření v toolbaru Chrome** (levý klik = spustí shrnutí).
+Alternativně lze použít **ikonu rozšíření v toolbaru Chrome** (klik = popup s výběrem šablony, nebo přímé spuštění při jedné šabloně).
 
 ### Funkce
 
 - **Výběr AI služby** — ChatGPT, Claude, Gemini, Grok
+- **Více pojmenovaných šablon** — vytváření, přejmenování a mazání promptových šablon v nastavení
+- **Výběr šablony při použití** — při 2+ šablonách se zobrazí dropdown/popup pro výběr; při jedné šabloně se spustí rovnou
 - **Editovatelný prompt** — plně přizpůsobitelná šablona s placeholdery
 - **Časové značky** — volitelné seskupení titulků po ~20 sekundách ve formátu `[01:30] text`
 - **Inteligentní dělení** — při zapnutých značkách se text zalamuje na konci vět
@@ -47,7 +49,7 @@ Pravý klik na ikonu rozšíření v toolbaru → **Settings**:
 |-----------|-------|
 | **AI Service** | Výběr cílové AI služby |
 | **Include timestamps** | Zapne/vypne časové značky u titulků |
-| **Prompt Template** | Šablona promptu s placeholdery |
+| **Prompt Templates** | Správa pojmenovaných šablon — přidávání, přejmenování, mazání |
 
 #### Placeholdery v šabloně
 
@@ -85,11 +87,13 @@ The extension adds a green **"✨ AI Summary"** button to YouTube pages (next to
 3. Opens a new tab with the selected AI service (ChatGPT, Claude, Gemini, or Grok)
 4. Pastes the prompt into the input field and submits it automatically
 
-Alternatively, use the **extension toolbar icon** (left-click = run summarization).
+Alternatively, use the **extension toolbar icon** (click = popup with template selection, or direct trigger with a single template).
 
 ### Features
 
 - **AI service selection** — ChatGPT, Claude, Gemini, Grok
+- **Multiple named templates** — create, rename, and delete prompt templates in settings
+- **Template selection on use** — with 2+ templates, a dropdown/popup lets you choose; with one template it triggers directly
 - **Editable prompt** — fully customizable template with placeholders
 - **Timestamps** — optional subtitle grouping in ~20-second chunks as `[01:30] text`
 - **Smart splitting** — when timestamps are enabled, text breaks at sentence boundaries
@@ -111,7 +115,7 @@ Right-click the extension icon in the toolbar → **Settings**:
 |---------|-------------|
 | **AI Service** | Choose the target AI service |
 | **Include timestamps** | Enable/disable timestamps in subtitles |
-| **Prompt Template** | Prompt template with placeholders |
+| **Prompt Templates** | Manage named templates — add, rename, delete |
 
 #### Template placeholders
 
@@ -143,10 +147,12 @@ Since 2025, YouTube requires a **PO Token** (Proof of Origin) to access subtitle
 ```
 ├── manifest.json            — Extension configuration (Manifest V3)
 ├── background.js            — Service worker: subtitle extraction, PO token, prompt building
-├── youtube-button.js        — Content script: "AI Summary" button on YouTube pages
+├── popup.html               — Toolbar popup UI: template selection
+├── popup.js                 — Toolbar popup logic
+├── youtube-button.js        — Content script: "AI Summary" button + dropdown on YouTube pages
 ├── inject.js                — Content script: prompt injection on AI service pages
 ├── options.html             — Settings page UI
-├── options.js               — Settings page logic (auto-save)
+├── options.js               — Settings page logic (auto-save, template CRUD)
 ├── icon48.png               — Extension icon 48x48
 ├── icon128.png              — Extension icon 128x128
 └── _locales/
