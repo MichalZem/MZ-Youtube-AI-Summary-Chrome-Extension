@@ -143,56 +143,23 @@ async function summarizeVideo(tabId, videoId, tabTitle, templateId) {
   chrome.tabs.create({ url: AI_URLS[ai] });
 }
 
-// Left-click toolbar icon
-chrome.action.onClicked.addListener(async (tab) => {
-  let url;
-  try {
-    url = new URL(tab.url || "");
-  } catch {
-    return;
-  }
-
-  const videoId = url.searchParams.get("v");
-
-  if (!url.hostname.includes("youtube.com") || !videoId) {
-    chrome.action.setBadgeText({ text: "!", tabId: tab.id });
-    chrome.action.setBadgeBackgroundColor({ color: "#cc0000", tabId: tab.id });
-    setTimeout(
-      () => chrome.action.setBadgeText({ text: "", tabId: tab.id }),
-      2000
-    );
-    return;
-  }
-
-  chrome.action.setBadgeText({ text: "...", tabId: tab.id });
-  chrome.action.setBadgeBackgroundColor({ color: "#10a37f", tabId: tab.id });
-
-  try {
-    await summarizeVideo(tab.id, videoId, tab.title);
-    chrome.action.setBadgeText({ text: "", tabId: tab.id });
-  } catch (err) {
-    console.error("YT Summary error:", err);
-    chrome.action.setBadgeText({ text: "ERR", tabId: tab.id });
-    chrome.action.setBadgeBackgroundColor({ color: "#cc0000", tabId: tab.id });
-    setTimeout(
-      () => chrome.action.setBadgeText({ text: "", tabId: tab.id }),
-      3000
-    );
-  }
-});
-
-// Message from YouTube page button
+// Message from YouTube page button or popup
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  if (msg.action !== "summarize" || !msg.videoId) return;
+  if (msg.action === "summarize" && msg.videoId) {
+    const tabId = sender.tab.id;
+    const tabTitle = sender.tab.title;
+    summarizeVideo(tabId, msg.videoId, tabTitle, msg.templateId)
+      .then(() => sendResponse({ ok: true }))
+      .catch((err) => sendResponse({ error: err.message }));
+    return true;
+  }
 
-  const tabId = sender.tab.id;
-  const tabTitle = sender.tab.title;
-
-  summarizeVideo(tabId, msg.videoId, tabTitle, msg.templateId)
-    .then(() => sendResponse({ ok: true }))
-    .catch((err) => sendResponse({ error: err.message }));
-
-  return true; // keep channel open for async response
+  if (msg.action === "summarizeFromPopup" && msg.videoId) {
+    summarizeVideo(msg.tabId, msg.videoId, msg.tabTitle, msg.templateId)
+      .then(() => sendResponse({ ok: true }))
+      .catch((err) => sendResponse({ error: err.message }));
+    return true;
+  }
 });
 
 // Runs in MAIN world on YouTube page

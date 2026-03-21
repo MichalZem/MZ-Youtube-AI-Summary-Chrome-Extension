@@ -14,7 +14,8 @@
       "48": "icon48.png",
       "128": "icon128.png"
     },
-    "default_title": "__MSG_actionTitle__"
+    "default_title": "__MSG_actionTitle__",
+    "default_popup": "popup.html"
   },
   "options_ui": {
     "page": "options.html",
