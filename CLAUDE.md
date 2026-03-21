@@ -7,10 +7,11 @@ Chrome Manifest V3 extension that extracts YouTube video subtitles and sends the
 ## Architecture
 
 ### Entry points
-- **background.js** — Service worker. Handles toolbar click (`chrome.action.onClicked`), message from YouTube button (`chrome.runtime.onMessage`), context menu, subtitle extraction via `chrome.scripting.executeScript`, and prompt building.
-- **youtube-button.js** — Content script on `youtube.com`. Injects "AI Summary" button next to voice search. Sends `{ action: "summarize", videoId }` message to background.
+- **background.js** — Service worker. Handles messages from YouTube button and popup (`chrome.runtime.onMessage`), context menu, subtitle extraction via `chrome.scripting.executeScript`, and prompt building.
+- **popup.html / popup.js** — Toolbar popup. On YouTube video page: shows template list if 2+ templates, or auto-triggers summarization with single template. On non-YouTube page: shows error.
+- **youtube-button.js** — Content script on `youtube.com`. Injects "AI Summary" button next to voice search. With 1 template sends directly; with 2+ templates shows dropdown menu. Sends `{ action: "summarize", videoId, templateId }` message to background.
 - **inject.js** — Content script on AI service pages (ChatGPT, Claude, Gemini, Grok). Reads prompt from `chrome.storage.local`, inserts into input field, clicks send.
-- **options.html / options.js** — Settings page. Auto-saves on every change (no save button). Opened via right-click context menu on extension icon.
+- **options.html / options.js** — Settings page. Auto-saves on every change (no save button). Manages multiple named prompt templates (add, rename, delete). Opened via right-click context menu on extension icon.
 
 ### Critical: PO Token extraction
 YouTube requires a Proof of Origin token for timedtext API since 2025. The extraction works by:
@@ -29,7 +30,7 @@ YouTube requires a Proof of Origin token for timedtext API since 2025. The extra
 | Key | Type | Description |
 |-----|------|-------------|
 | `ytAiService` | `string` | Selected AI: `chatgpt` \| `claude` \| `gemini` \| `grok` |
-| `ytPromptTemplate` | `string` | User's prompt template with `{title}`, `{url}`, `{lang}`, `{subtitles}` placeholders |
+| `ytPromptTemplates` | `array` | Array of `{ id, name, prompt }` objects. `id`: `"default"` or `"t_" + timestamp`. Migrated from old `ytPromptTemplate` on first run. |
 | `ytTimestamps` | `boolean` | Whether to include `[MM:SS]` timestamps |
 | `ytSummaryPrompt` | `string` | Built prompt ready for injection (temporary, consumed by inject.js) |
 | `ytSummaryTimestamp` | `number` | `Date.now()` when prompt was stored (expires after 5 min) |
@@ -38,7 +39,7 @@ YouTube requires a Proof of Origin token for timedtext API since 2025. The extra
 - `_locales/en/messages.json` — English (default)
 - `_locales/cs/messages.json` — Czech
 - Manifest uses `__MSG_*__` placeholders
-- HTML uses `data-i18n` (textContent) and `data-i18n-html` (innerHTML with `<code>` wrapping)
+- HTML uses `data-i18n` (textContent), `data-i18n-html` (innerHTML with `<code>` wrapping), and `data-i18n-placeholder` (placeholder attribute)
 - JS uses `chrome.i18n.getMessage(key)`
 - **All user-facing strings must be in both locale files.** Never hardcode UI text.
 
@@ -71,14 +72,21 @@ When timestamps are enabled, subtitles are grouped in ~20-second chunks with sen
 
 ## Testing checklist
 
-- [ ] Toolbar icon click on YouTube video → opens AI with prompt
-- [ ] Toolbar icon click on non-YouTube page → shows "!" badge
-- [ ] YouTube page button click → same as toolbar
+- [ ] Toolbar icon click on YouTube video (1 template) → auto-triggers summarization
+- [ ] Toolbar icon click on YouTube video (2+ templates) → shows popup with template list
+- [ ] Toolbar icon click on non-YouTube page → shows error in popup
+- [ ] YouTube page button click (1 template) → sends directly without dropdown
+- [ ] YouTube page button click (2+ templates) → shows dropdown menu with template names
+- [ ] Click outside dropdown → closes dropdown
+- [ ] Navigation to another video → closes dropdown
 - [ ] Right-click icon → "Settings" opens options page
 - [ ] Options: change AI service → saved immediately
 - [ ] Options: toggle timestamps → saved immediately
-- [ ] Options: edit prompt → saved after 500ms
-- [ ] Options: reset prompt → restores localized default
+- [ ] Options: add/rename/delete templates → saved immediately
+- [ ] Options: cannot delete last template → shows error
+- [ ] Options: edit prompt textarea → saved after 500ms
+- [ ] Options: reset prompt → restores localized default for selected template
+- [ ] Upgrade from old version with custom prompt → migrates as 2nd template
 - [ ] Video without subtitles → shows "ERR" badge
 - [ ] Each AI service (ChatGPT, Claude, Gemini, Grok) → prompt inserted and sent
 - [ ] Timestamps on → `[MM:SS]` format with ~20s grouping
