@@ -8,6 +8,10 @@
     const url = new URL(tab.url || "");
     if (url.hostname.includes("youtube.com")) {
       videoId = url.searchParams.get("v");
+      if (!videoId) {
+        const match = url.pathname.match(/^\/(live|shorts)\/([a-zA-Z0-9_-]+)/);
+        if (match) videoId = match[2];
+      }
     }
   } catch {}
 

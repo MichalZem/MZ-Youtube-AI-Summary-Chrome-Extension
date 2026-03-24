@@ -5,6 +5,14 @@
   const DROPDOWN_ID = "yt-summary-dropdown";
   let observer;
 
+  function getVideoId() {
+    const params = new URLSearchParams(window.location.search);
+    const v = params.get("v");
+    if (v) return v;
+    const match = window.location.pathname.match(/^\/(live|shorts)\/([a-zA-Z0-9_-]+)/);
+    return match ? match[2] : null;
+  }
+
   function createButton() {
     if (document.getElementById(BUTTON_ID)) return;
 
@@ -134,7 +142,7 @@
 
   async function handleClick() {
     const btn = document.getElementById(BUTTON_ID);
-    const videoId = new URLSearchParams(window.location.search).get("v");
+    const videoId = getVideoId();
     if (!videoId || btn.classList.contains("loading")) return;
 
     // Close dropdown if already open
@@ -157,7 +165,7 @@
 
   async function sendSummarize(templateId) {
     const btn = document.getElementById(BUTTON_ID);
-    const videoId = new URLSearchParams(window.location.search).get("v");
+    const videoId = getVideoId();
     if (!videoId) return;
 
     const originalText = btn.textContent;
@@ -184,7 +192,7 @@
   }
 
   function init() {
-    const videoId = new URLSearchParams(window.location.search).get("v");
+    const videoId = getVideoId();
     if (videoId) createButton();
   }
 
