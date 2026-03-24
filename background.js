@@ -140,7 +140,8 @@ async function summarizeVideo(tabId, videoId, tabTitle, templateId) {
     ytSummaryTimestamp: Date.now(),
   });
 
-  chrome.tabs.create({ url: AI_URLS[ai] });
+  const currentTab = await chrome.tabs.get(tabId);
+  chrome.tabs.create({ url: AI_URLS[ai], index: currentTab.index + 1 });
 }
 
 // Message from YouTube page button or popup
