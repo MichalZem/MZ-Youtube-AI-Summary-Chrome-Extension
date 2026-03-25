@@ -111,9 +111,11 @@ async function summarizeVideo(tabId, videoId, tabTitle, templateId) {
     "ytAiService",
     "ytPromptTemplates",
     "ytTimestamps",
+    "ytCloseTab",
   ]);
   const ai = settings.ytAiService || "chatgpt";
   const timestamps = settings.ytTimestamps || false;
+  const closeTab = settings.ytCloseTab || false;
 
   let template = getDefaultPrompt();
   const templates = settings.ytPromptTemplates;
@@ -142,6 +144,9 @@ async function summarizeVideo(tabId, videoId, tabTitle, templateId) {
 
   const currentTab = await chrome.tabs.get(tabId);
   chrome.tabs.create({ url: AI_URLS[ai], index: currentTab.index + 1 });
+  if (closeTab) {
+    chrome.tabs.remove(tabId);
+  }
 }
 
 // Message from YouTube page button or popup

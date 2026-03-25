@@ -29,6 +29,9 @@
   "settingsOptions": {
     "message": "Options"
   },
+  "settingsCloseTab": {
+    "message": "Close YouTube tab after opening AI"
+  },
   "settingsTimestamps": {
     "message": "Include timestamps — e.g. $EXAMPLE$ before each subtitle line",
     "placeholders": {

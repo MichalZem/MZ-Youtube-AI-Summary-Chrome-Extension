@@ -29,6 +29,9 @@
   "settingsOptions": {
     "message": "Možnosti"
   },
+  "settingsCloseTab": {
+    "message": "Zavřít záložku YouTube po otevření AI"
+  },
   "settingsTimestamps": {
     "message": "Zahrnout časové značky — např. $EXAMPLE$ před každým řádkem titulků",
     "placeholders": {

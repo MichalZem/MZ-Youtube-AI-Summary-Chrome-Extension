@@ -32,6 +32,7 @@ YouTube requires a Proof of Origin token for timedtext API since 2025. The extra
 | `ytAiService` | `string` | Selected AI: `chatgpt` \| `claude` \| `gemini` \| `grok` |
 | `ytPromptTemplates` | `array` | Array of `{ id, name, prompt }` objects. `id`: `"default"` or `"t_" + timestamp`. Migrated from old `ytPromptTemplate` on first run. |
 | `ytTimestamps` | `boolean` | Whether to include `[MM:SS]` timestamps |
+| `ytCloseTab` | `boolean` | Whether to close YouTube tab after opening AI tab |
 | `ytSummaryPrompt` | `string` | Built prompt ready for injection (temporary, consumed by inject.js) |
 | `ytSummaryTimestamp` | `number` | `Date.now()` when prompt was stored (expires after 5 min) |
 
@@ -83,6 +84,9 @@ When timestamps are enabled, subtitles are grouped in ~20-second chunks with sen
 - [ ] Right-click icon → "Settings" opens options page
 - [ ] Options: change AI service → saved immediately
 - [ ] Options: toggle timestamps → saved immediately
+- [ ] Options: toggle close YouTube tab → saved immediately
+- [ ] Close tab on → YouTube tab closes after AI tab opens
+- [ ] Close tab off → YouTube tab stays open (default)
 - [ ] Options: add/rename/delete templates → saved immediately
 - [ ] Options: cannot delete last template → shows error
 - [ ] Options: edit prompt textarea → saved after 500ms

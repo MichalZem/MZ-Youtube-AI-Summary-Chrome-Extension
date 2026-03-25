@@ -34,6 +34,7 @@ function localizePage() {
 const statusEl = document.getElementById("status");
 const promptEl = document.getElementById("prompt-template");
 const timestampsEl = document.getElementById("timestamps");
+const closeTabEl = document.getElementById("close-tab");
 const resetBtn = document.getElementById("btn-reset");
 const templateListEl = document.getElementById("template-list");
 const addTemplateBtn = document.getElementById("btn-add-template");
@@ -143,6 +144,7 @@ function saveAll() {
       ytAiService: ai,
       ytPromptTemplates: templates,
       ytTimestamps: timestampsEl.checked,
+      ytCloseTab: closeTabEl.checked,
     },
     () => {
       renderTemplateList();
@@ -170,11 +172,12 @@ localizePage();
 (async () => {
   templates = await migrateTemplates();
 
-  const data = await chrome.storage.local.get(["ytAiService", "ytTimestamps"]);
+  const data = await chrome.storage.local.get(["ytAiService", "ytTimestamps", "ytCloseTab"]);
   const ai = data.ytAiService || "chatgpt";
   const radio = document.getElementById("ai-" + ai);
   if (radio) radio.checked = true;
   timestampsEl.checked = data.ytTimestamps || false;
+  closeTabEl.checked = data.ytCloseTab || false;
 
   // Select first template
   selectedId = templates[0].id;
@@ -188,6 +191,7 @@ document.querySelectorAll('input[name="ai"]').forEach((radio) => {
   radio.addEventListener("change", saveAll);
 });
 timestampsEl.addEventListener("change", saveAll);
+closeTabEl.addEventListener("change", saveAll);
 promptEl.addEventListener("input", saveDebounced);
 templateNameInput.addEventListener("input", saveDebounced);
 addTemplateBtn.addEventListener("click", addTemplate);
